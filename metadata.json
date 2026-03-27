@@ -1,0 +1,5 @@
+{
+  "name": "Charlie 2 Learning Hub",
+  "description": "Management dashboard for the Charlie 2 Learning Study Group.",
+  "requestFramePermissions": ["camera", "microphone", "display-capture"]
+}

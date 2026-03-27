@@ -1,0 +1,204 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user profile in the system.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["Group Leader", "Assistant Leader", "Secretary", "Tech Coordinator", "Subject Coordinator", "Member"] },
+        "regNo": { "type": "string" },
+        "hasReported": { "type": "boolean" },
+        "profilePicture": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "role", "regNo"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "An attendance record for a user on a specific date.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["Present", "Absent", "Late"] }
+      },
+      "required": ["userId", "date", "status"]
+    },
+    "WeeklyAttendance": {
+      "title": "WeeklyAttendance",
+      "description": "Historical weekly attendance records.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "weekRange": { "type": "string" },
+        "records": { "type": "array", "items": { "$ref": "Attendance" } },
+        "completedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "weekRange", "records", "completedAt"]
+    },
+    "Resource": {
+      "title": "Resource",
+      "description": "A learning resource.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "link": { "type": "string" },
+        "uploadedBy": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "type": { "type": "string", "enum": ["PDF", "Video", "Link", "Doc"] }
+      },
+      "required": ["id", "title", "link", "uploadedBy", "date", "type"]
+    },
+    "Quiz": {
+      "title": "Quiz",
+      "description": "A quiz for members.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["Upcoming", "Completed"] },
+        "questions": { "type": "array", "items": { "type": "string" } },
+        "submissions": { "type": "object" }
+      },
+      "required": ["id", "title", "date", "status"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A chat message.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "author": { "type": "string" },
+        "content": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "isPinned": { "type": "boolean" }
+      },
+      "required": ["id", "author", "content", "timestamp"]
+    },
+    "OnlineClass": {
+      "title": "OnlineClass",
+      "description": "An online class session.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "duration": { "type": "number" },
+        "scheduledBy": { "type": "string" },
+        "isLive": { "type": "boolean" },
+        "participants": { "type": "array", "items": { "type": "string" } },
+        "meetLink": { "type": "string" }
+      },
+      "required": ["id", "title", "startTime", "duration", "scheduledBy", "isLive"]
+    },
+    "WeeklyGoal": {
+      "title": "WeeklyGoal",
+      "description": "A weekly goal for the group.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "week": { "type": "string" },
+        "goal": { "type": "string" },
+        "location": { "type": "string" }
+      },
+      "required": ["id", "week", "goal", "location"]
+    },
+    "TimetableEntry": {
+      "title": "TimetableEntry",
+      "description": "An entry in the group timetable.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "day": { "type": "string" },
+        "time": { "type": "string" },
+        "subject": { "type": "string" },
+        "coordinator": { "type": "string" }
+      },
+      "required": ["id", "day", "time", "subject", "coordinator"]
+    },
+    "ParticipationRecord": {
+      "title": "ParticipationRecord",
+      "description": "A record of participation in an online class.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "classId": { "type": "string" },
+        "className": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "classId", "className", "timestamp"]
+    },
+    "LearningModelStep": {
+      "title": "LearningModelStep",
+      "description": "A step in the learning model.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "phase": { "type": "string" },
+        "desc": { "type": "string" }
+      },
+      "required": ["id", "phase", "desc"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Individual user profiles."
+    },
+    "/attendance/{attendanceId}": {
+      "schema": "Attendance",
+      "description": "Daily attendance records."
+    },
+    "/attendanceHistory/{historyId}": {
+      "schema": "WeeklyAttendance",
+      "description": "Archived weekly attendance records."
+    },
+    "/resources/{resourceId}": {
+      "schema": "Resource",
+      "description": "Learning resources."
+    },
+    "/quizzes/{quizId}": {
+      "schema": "Quiz",
+      "description": "Quizzes and submissions."
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Chat messages."
+    },
+    "/onlineClasses/{classId}": {
+      "schema": "OnlineClass",
+      "description": "Online class sessions."
+    },
+    "/weeklyGoals/{goalId}": {
+      "schema": "WeeklyGoal",
+      "description": "Group goals."
+    },
+    "/timetable/{entryId}": {
+      "schema": "TimetableEntry",
+      "description": "Group timetable."
+    },
+    "/participationRecords/{recordId}": {
+      "schema": "ParticipationRecord",
+      "description": "Class participation tracking."
+    },
+    "/learningModel/{stepId}": {
+      "schema": "LearningModelStep",
+      "description": "Learning model phases."
+    },
+    "/settings/global": {
+      "schema": {
+        "type": "object",
+        "properties": {
+          "lastResetDate": { "type": "string" },
+          "discussionDisabled": { "type": "boolean" }
+        }
+      },
+      "description": "Global application settings."
+    }
+  }
+}

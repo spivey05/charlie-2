@@ -1,0 +1,11 @@
+@import "tailwindcss";
+@variant dark (&:where(.dark, .dark *));
+
+@layer utilities {
+  .glow-primary {
+    box-shadow: 0 0 15px rgba(79, 70, 229, 0.5);
+  }
+  .dark .glow-primary {
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+  }
+}
